@@ -88,6 +88,33 @@ function multimedia_file_read_all() {
 }
 
 /**
+ * Filters the multimedia_files from database based on a given category
+ * @param $category (string)
+ * @return array of arrays (keys: id, title, category, format_type, genre, path): each subarray = a result row
+ * @return array (empty), if no multimedia file found
+ * @return null, if connection error
+ */
+function multimedia_file_filter_by_category($category) {
+    $connection = db_connect();
+    if (!$connection) {
+        return null;
+    }
+
+    $query = "SELECT * FROM multimedia_files WHERE category = '$category';";
+    $result = mysqli_query($connection, $query);
+    mysqli_close($connection);
+    if (mysqli_num_rows($result) == 0) {
+        return array();
+    } else {
+        $array = array();
+        while ($row = mysqli_fetch_assoc($result)) {
+            $array[] = $row;
+        }
+        return $array;
+    }
+}
+
+/**
  * Updates a multimedia_file
  * @param $title_old (string)
  * @param $title_new (string)
@@ -112,8 +139,8 @@ function multimedia_file_update($title_old, $title_new, $category_new, $format_t
     $genre_new = mysqli_real_escape_string($connection, $genre_new);
     $path_new = mysqli_real_escape_string($connection, $path_new);
 
-    $query = "UPDATE multimedia_files SET title = '$title_new', category = '$category_new', format_type = '$format_type_new', " .
-        "genre = '$genre_new', path = '$path_new' WHERE title = '$title_old';";
+    $query = "UPDATE multimedia_files SET title = '$title_new', category = '$category_new', " .
+        "format_type = '$format_type_new', genre = '$genre_new', path = '$path_new' WHERE title = '$title_old';";
     $result = mysqli_query($connection, $query);
     $affected_rows = mysqli_affected_rows($connection);
     mysqli_close($connection);
