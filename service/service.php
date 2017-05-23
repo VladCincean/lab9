@@ -6,7 +6,7 @@
  * Time: 10:24 AM
  */
 
-require_once ('db_connect.php');
+require_once('../db_connect.php');
 
 /**
  * Saves a new multimedia_file into the database
