@@ -4,19 +4,25 @@
 
 $(document).ready(function() {
     $('#filterByCategorySubmit').click(function() {
-       console.log('#filterByCategory -- click event');
+       console.log('#filterByCategorySubmit -- click event');
 
        var category = $('#filterByCategoryInput').val();
+       var url = '../controller/filter_by_category.php?category=' + category;
 
-       var xmlhttp = new XMLHttpRequest();
-       xmlhttp.onreadystatechange = function() {
-           if (this.readyState == 4 && this.status == 200) {
-               console.log('filter by category: response = ' + this.responseText);
-               filterStateChanged(this.responseText);
-           }
-       };
-       xmlhttp.open('GET', '../controller/filter_by_category.php?category=' + category, true);
-       xmlhttp.send();
+       $.get(url, function(data, status) {
+           console.log('#filterByCategorySubmit::click -- data = ' + data + ', status = ' + status);
+           filterStateChanged(data);
+       });
+
+       // var xmlhttp = new XMLHttpRequest();
+       // xmlhttp.onreadystatechange = function() {
+       //     if (this.readyState == 4 && this.status == 200) {
+       //         console.log('filter by category: response = ' + this.responseText);
+       //         filterStateChanged(this.responseText);
+       //     }
+       // };
+       // xmlhttp.open('GET', '../controller/filter_by_category.php?category=' + category, true);
+       // xmlhttp.send();
     });
 
     function filterStateChanged(response) {
@@ -36,6 +42,15 @@ $(document).ready(function() {
             var format_type = $('<td></td>').text(arr[i]['format_type']);
             var genre = $('<td></td>').text(arr[i]['genre']);
             var path = $('<td></td>').text(arr[i]['path']);
+            var deleteButton = $('<button></button>')
+                .text('Delete')
+                .attr('id', arr[i]['id'])
+                .click(function() {
+                    console.log('delete(#' + $(this).attr('id') + ') clicked');
+                    processDeleteRequest($(this).attr('id'));
+                    $(this).parent().remove();
+                });
+
 
             // fill the row
             row.append(id);
@@ -44,9 +59,23 @@ $(document).ready(function() {
             row.append(format_type);
             row.append(genre);
             row.append(path);
+            row.append(deleteButton);
 
             // add row to table
             result_table.append(row);
         }
+    }
+
+    function processDeleteRequest(id) {
+        var url = '../controller/delete.php?id=' + id;
+
+        $.get(url, function(data, status) {
+            var response = JSON.parse(data);
+            if (response == true) {
+                alert('Delete(id = ' + id + '): success!');
+            } else {
+                alert('Delete(id = ' + id + '): failed!');
+            }
+        });
     }
 });

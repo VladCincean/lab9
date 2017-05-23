@@ -10,12 +10,11 @@ include_once 'head.php';
 
 <body>
 <div id="content">
-    <form id="filterByCategory" method="POST">
-        <label>Category: </label>
-        <input id="filterByCategoryInput" type="text" />
-        <input id="filterByCategorySubmit" type="submit" />
-    </form>
+    <label>Category: </label>
+    <input id="filterByCategoryInput" type="text" />
+    <input id="filterByCategorySubmit" type="submit" />
 
+    <br /><br />
     <table id="resultTable" border="1">
         <thead>
             <tr>

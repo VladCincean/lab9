@@ -152,19 +152,20 @@ function multimedia_file_update($title_old, $title_new, $category_new, $format_t
 
 /**
  * Deletes a multimedia_file given its title
- * @param $title (string)
+ * @param $id (string)
  * @return TRUE,    if operation succeeds
  * @return FALSE,   if operation fails (no row deleted)
  * @return null,    if connection error
  */
-function multimedia_file_delete($title) {
+function multimedia_file_delete($id) {
     $connection = db_connect();
     if (!$connection) {
         return null;
     }
 
-    $title = mysqli_real_escape_string($connection, $title);
-    $query = "DELETE FROM multimedia_files WHERE title = '$title';";
+//    $title = mysqli_real_escape_string($connection, $title);
+    $id = mysqli_real_escape_string($connection, $id);
+    $query = "DELETE FROM multimedia_files WHERE id = '$id';";
     $result = mysqli_query($connection, $query);
     $affected_rows = mysqli_affected_rows($connection);
     mysqli_close($connection);
