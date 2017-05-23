@@ -31,7 +31,7 @@ function multimedia_file_create($title, $category, $format_type, $genre, $path) 
     $genre = mysqli_real_escape_string($connection, $genre);
     $path = mysqli_real_escape_string($connection, $path);
 
-    $query = "INSERT INTO multimedia_files (title, category format_type, genre, path)" .
+    $query = "INSERT INTO multimedia_files (title, category, format_type, genre, path)" .
         "VALUES ('$title', '$category', '$format_type', '$genre', '$path');";
     $result = mysqli_query($connection, $query);
     mysqli_close($connection);

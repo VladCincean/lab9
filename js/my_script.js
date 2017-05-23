@@ -3,6 +3,33 @@
  */
 
 $(document).ready(function() {
+    $('#saveButton').click(function() {
+        console.log('#saveButton -- click event');
+
+        var title = $('#sTitle').val();
+        var category = $('#sCategory').val();
+        var formatType = $('#sFormatType').val();
+        var genre = $('#sGenre').val();
+        var path = $('#sPath').val();
+
+        var url = '../controller/save.php' +
+                '?title=' + title +
+                '&category=' + category +
+                '&format_type=' + formatType +
+                '&genre=' + genre +
+                '&path=' + path;
+
+        $.get(url, function(data, status) {
+            console.log('#saveButton: GET response -- data = ' + data + ', status = ' + status);
+            var response = JSON.parse(data);
+            if (response == true) {
+                alert('Save(title = ' + title + ', ...): success!');
+            } else {
+                alert('Save(title = ' + title + ', ...): failed!');
+            }
+        });
+    });
+
     $('#filterByCategorySubmit').click(function() {
        console.log('#filterByCategorySubmit -- click event');
 
@@ -10,7 +37,7 @@ $(document).ready(function() {
        var url = '../controller/filter_by_category.php?category=' + category;
 
        $.get(url, function(data, status) {
-           console.log('#filterByCategorySubmit::click -- data = ' + data + ', status = ' + status);
+           console.log('#filterByCategorySubmit: GET response -- data = ' + data + ', status = ' + status);
            filterStateChanged(data);
        });
 
@@ -70,6 +97,7 @@ $(document).ready(function() {
         var url = '../controller/delete.php?id=' + id;
 
         $.get(url, function(data, status) {
+            console.log('processDeleteRequest: GET response -- data = ' + data + ', status = ' + status);
             var response = JSON.parse(data);
             if (response == true) {
                 alert('Delete(id = ' + id + '): success!');
