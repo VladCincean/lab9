@@ -5,9 +5,11 @@
  * Date: 5/15/17
  * Time: 11:16 AM
  */
-include_once 'head.php';
 ?>
-
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="js/my_script.js"></script>
+</head>
 <body>
 <div id="content">
     <h4>Filter by category</h4>

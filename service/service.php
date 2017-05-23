@@ -39,20 +39,20 @@ function multimedia_file_create($title, $category, $format_type, $genre, $path) 
 }
 
 /**
- * Reads the multimedia_file with the given title from the database
- * @param $title (string)
+ * Finds the multimedia_file with the given id from the database
+ * @param $id (string)
  * @return array (keys: id, title, category, format_type, genre, path): the result row
  * @return array (empty), if not found
  * @return null, if connection error
  */
-function multimedia_file_read($title) {
+function multimedia_file_find($id) {
     $connection = db_connect();
     if (!$connection) {
         return null;
     }
 
-    $title = mysqli_real_escape_string($connection, $title);
-    $query = "SELECT * FROM multimedia_files WHERE title = '$title';";
+    $id = mysqli_real_escape_string($connection, $id);
+    $query = "SELECT * FROM multimedia_files WHERE id = '$id';";
     $result = mysqli_query($connection, $query);
     mysqli_close($connection);
     if (mysqli_num_rows($result) == 0) {
@@ -116,31 +116,31 @@ function multimedia_file_filter_by_category($category) {
 
 /**
  * Updates a multimedia_file
- * @param $title_old (string)
- * @param $title_new (string)
- * @param $category_new (string)
- * @param $format_type_new (string)
- * @param $genre_new (string)
- * @param $path_new (string)
+ * @param $id (string)
+ * @param $title (string)
+ * @param $category (string)
+ * @param $format_type (string)
+ * @param $genre (string)
+ * @param $path (string)
  * @return TRUE,    if operation succeeds
  * @return FALSE,   if no row is affected
  * @return null,    if connection error
  */
-function multimedia_file_update($title_old, $title_new, $category_new, $format_type_new, $genre_new, $path_new) {
+function multimedia_file_update($id, $title, $category, $format_type, $genre, $path) {
     $connection = db_connect();
     if (!$connection) {
         return null;
     }
 
-    $title_old = mysqli_real_escape_string($connection, $title_old);
-    $title_new = mysqli_real_escape_string($connection, $title_new);
-    $category_new = mysqli_real_escape_string($connection, $category_new);
-    $format_type_new = mysqli_real_escape_string($connection, $format_type_new);
-    $genre_new = mysqli_real_escape_string($connection, $genre_new);
-    $path_new = mysqli_real_escape_string($connection, $path_new);
+    $id = mysqli_real_escape_string($connection, $id);
+    $title = mysqli_real_escape_string($connection, $title);
+    $category = mysqli_real_escape_string($connection, $category);
+    $format_type = mysqli_real_escape_string($connection, $format_type);
+    $genre = mysqli_real_escape_string($connection, $genre);
+    $path = mysqli_real_escape_string($connection, $path);
 
-    $query = "UPDATE multimedia_files SET title = '$title_new', category = '$category_new', " .
-        "format_type = '$format_type_new', genre = '$genre_new', path = '$path_new' WHERE title = '$title_old';";
+    $query = "UPDATE multimedia_files SET title = '$title', category = '$category', " .
+        "format_type = '$format_type', genre = '$genre', path = '$path' WHERE id = '$id';";
     $result = mysqli_query($connection, $query);
     $affected_rows = mysqli_affected_rows($connection);
     mysqli_close($connection);
@@ -163,7 +163,6 @@ function multimedia_file_delete($id) {
         return null;
     }
 
-//    $title = mysqli_real_escape_string($connection, $title);
     $id = mysqli_real_escape_string($connection, $id);
     $query = "DELETE FROM multimedia_files WHERE id = '$id';";
     $result = mysqli_query($connection, $query);

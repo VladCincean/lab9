@@ -30,6 +30,39 @@ $(document).ready(function() {
         });
     });
 
+    $('#updateButton').click(function() {
+        console.log('#updateButton -- click event');
+
+        var id = $('#sId').val();
+        if (!id) {
+            alert('Update: failed: no id selected');
+            return;
+        }
+        var title = $('#sTitle').val();
+        var category = $('#sCategory').val();
+        var formatType = $('#sFormatType').val();
+        var genre = $('#sGenre').val();
+        var path = $('#sPath').val();
+
+        var url = '../controller/update.php' +
+            '?id=' + id +
+            '&title=' + title +
+            '&category=' + category +
+            '&format_type=' + formatType +
+            '&genre=' + genre +
+            '&path=' + path;
+
+        $.get(url, function(data, status) {
+            console.log('#updateButton: GET response -- data = ' + data + ', status = ' + status);
+            var response = JSON.parse(data);
+            if (response == true) {
+                alert('Update(id = ' + id + ', ...): success!');
+            } else {
+                alert('Update(id = ' + id + ', ...): failed!');
+            }
+        });
+    });
+
     $('#filterByCategorySubmit').click(function() {
        console.log('#filterByCategorySubmit -- click event');
 
@@ -38,7 +71,7 @@ $(document).ready(function() {
 
        $.get(url, function(data, status) {
            console.log('#filterByCategorySubmit: GET response -- data = ' + data + ', status = ' + status);
-           filterStateChanged(data);
+           processFilterResponse(data);
        });
 
        // var xmlhttp = new XMLHttpRequest();
@@ -52,9 +85,9 @@ $(document).ready(function() {
        // xmlhttp.send();
     });
 
-    function filterStateChanged(response) {
+    function processFilterResponse(response) {
         var arr = JSON.parse(response);
-        console.log('filterStateChanged: JSON.parse(response) -> arr = ' + arr);
+        console.log('processFilterResponse: JSON.parse(response) -> arr = ' + arr);
         var result_table = $('#resultTable tbody');
 
         // empty the table
@@ -77,6 +110,13 @@ $(document).ready(function() {
                     processDeleteRequest($(this).attr('id'));
                     $(this).parent().remove();
                 });
+            var updateButton = $('<button></button>')
+                .text('Update')
+                .attr('id', arr[i]['id'])
+                .click(function() {
+                    console.log('update(#' + $(this).attr('id') + ')clicked');
+                    processUpdateRequest($(this).attr('id'));
+                });
 
 
             // fill the row
@@ -87,6 +127,7 @@ $(document).ready(function() {
             row.append(genre);
             row.append(path);
             row.append(deleteButton);
+            row.append(updateButton);
 
             // add row to table
             result_table.append(row);
@@ -104,6 +145,23 @@ $(document).ready(function() {
             } else {
                 alert('Delete(id = ' + id + '): failed!');
             }
+        });
+    }
+
+    function processUpdateRequest(id) {
+        var url = '../controller/find.php?id=' + id;
+
+        // var arr = null;
+        $.get(url, function(data, status) {
+            console.log('processDeleteRequest: GET response -- data = ' + data + ', status = ' + status);
+            var arr = JSON.parse(data);
+
+            $('#sId').val(id);
+            $('#sTitle').val(arr['title']);
+            $('#sCategory').val(arr['category']);
+            $('#sFormatType').val(arr['format_type']);
+            $('#sGenre').val(arr['genre']);
+            $('#sPath').val(arr['path']);
         });
     }
 });
