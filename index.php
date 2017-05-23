@@ -52,5 +52,10 @@
 
         </tbody>
     </table>
+
+    <h5>History</h5>
+    <ul id="searchHistory">
+
+    </ul>
 </div>
 </body>

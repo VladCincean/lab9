@@ -3,6 +3,8 @@
  */
 
 $(document).ready(function() {
+    var searchHistory = new Array();
+
     $('#saveButton').click(function() {
         console.log('#saveButton -- click event');
 
@@ -69,9 +71,12 @@ $(document).ready(function() {
        var category = $('#filterByCategoryInput').val();
        var url = '../controller/filter_by_category.php?category=' + category;
 
+       searchHistory.push(category);
+
        $.get(url, function(data, status) {
            console.log('#filterByCategorySubmit: GET response -- data = ' + data + ', status = ' + status);
            processFilterResponse(data);
+           updateSearchHistroy();
        });
 
        // var xmlhttp = new XMLHttpRequest();
@@ -132,6 +137,13 @@ $(document).ready(function() {
             // add row to table
             result_table.append(row);
         }
+    }
+
+    function updateSearchHistroy() {
+
+        $('#searchHistory').prepend(
+            $('<li></li>').text(searchHistory[searchHistory.length - 1])
+        );
     }
 
     function processDeleteRequest(id) {
